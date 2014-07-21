@@ -72,7 +72,7 @@ class Petrovich {
 
     String lowerName = name.toLowerCase();
 
-    for (var rule in _rules[type]['exceptions'].values) {
+    for (var rule in _rules[type]['exceptions']) {
       if (!_checkGender(rule['gender'])) {
         continue;
       }
@@ -88,6 +88,71 @@ class Petrovich {
 
     return false;
 
+  }
+
+  String _findInRules(String name, int cs, String type) {
+    var suffixes = _rules[type]['suffixes'];
+
+    for (var rule in suffixes) {
+      if (!_checkGender(rule['gender'])) {
+        continue;
+      }
+
+      for (String lastChar in rule['test']) {
+        int from = name.length - lastChar.length;
+        String lastNameChar = name.substring(from, name.length);
+
+        if (lastChar == lastNameChar) {
+          if (rule['mods'][cs] == '.') {
+            return name;
+          }
+
+          return _applyRule(rule['mods'], name, cs);
+        }
+      }
+    }
+
+    return name;
+  }
+
+  String _inflect(String name, int cs, String type) {
+    List<String> namesArr = name.split('-');
+    List<String> result = new List<String>();
+
+    namesArr.forEach((String arrName) {
+      var exception = _checkException(arrName, cs, type);
+      if (exception is String) {
+        result.add(exception);
+      } else {
+        result.add(_findInRules(name, cs, type));
+      }
+    });
+
+    return result.join('-');
+  }
+
+  String lastName(String name, [int cs = CASE_NOMENATIVE]) {
+    if (cs == CASE_NOMENATIVE) {
+      return name;
+    }
+
+    return _inflect(name, cs, 'lastname');
+  }
+
+  String middleName(String name, [int cs = CASE_NOMENATIVE]) {
+    if (cs == CASE_NOMENATIVE) {
+      return name;
+    }
+
+    return _inflect(name, cs, 'middlename');
+  }
+
+  String firstName(String name, [int cs = CASE_NOMENATIVE]) {
+    if (cs == CASE_NOMENATIVE) {
+      return name;
+    }
+
+    return _inflect(name, cs, 'firstname');
   }
 
 }
