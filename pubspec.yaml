@@ -5,5 +5,5 @@ homepage: https://github.com/iamsalnikov/petrovich-dart
 description:
   A library to inflect Russian anthroponyms such as first names, last names, and middle names.
   Port of https://github.com/petrovich/petrovich-ruby
-dependencies:
+dev_dependencies:
   unittest: ">=0.11.0+2 <0.12.0""
