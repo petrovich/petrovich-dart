@@ -1,0 +1,3 @@
+[submodule "lib/rules"]
+	path = lib/rules
+	url = git@github.com:petrovich/petrovich-rules.git
