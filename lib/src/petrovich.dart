@@ -14,12 +14,12 @@ class Petrovich {
   static const GENDER_FEMALE = 2;
 
   Map _rules;
-  int _gender = GENDER_ANDROGYNOUS;
+  int gender = GENDER_ANDROGYNOUS;
 
   /**
    * Constructor
    */
-  Petrovich([this._gender = GENDER_ANDROGYNOUS, rulesPath = '../rules/rules.json']) {
+  Petrovich([this.gender = GENDER_ANDROGYNOUS, rulesPath = '../rules/rules.json']) {
     File rulesFile = new File(rulesPath);
 
     String rulesJson = rulesFile.readAsStringSync();
@@ -29,7 +29,7 @@ class Petrovich {
   /**
    * Detect gender by middle name
    */
-  int detectGender(String middleName) {
+  static int detectGender(String middleName) {
     switch (middleName.substring(middleName.length - 2)) {
       case 'ич':
         return GENDER_MALE;
