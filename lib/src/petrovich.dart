@@ -58,11 +58,36 @@ class Petrovich {
     return this.gender == _getGender(gender) || _getGender(gender) == GENDER_ANDROGYNOUS;
   }
 
-  String _applyRule(Map<int, String> mods, String name, int cs) {
+  String _applyRule(List<String> mods, String name, int cs) {
     int to = name.length - mods[cs].allMatches('-').length;
     String result = name.substring(0, to);
     result += mods[cs].replaceAll('-', '');
     return result;
+  }
+
+  _checkException(String name, int cs, String type) {
+    if (!_rules[type].keys.contains('exceptions')) {
+      return false;
+    }
+
+    String lowerName = name.toLowerCase();
+
+    for (var rule in _rules[type]['exceptions'].values) {
+      if (!_checkGender(rule['gender'])) {
+        continue;
+      }
+
+      if (rule['test'].contains(lowerName)) {
+        if (rule['mods'][cs] == '.') {
+          return name;
+        }
+
+        return _applyRule(rule['mods'], name, cs);
+      }
+    }
+
+    return false;
+
   }
 
 }
