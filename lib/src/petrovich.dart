@@ -40,4 +40,29 @@ class Petrovich {
     }
   }
 
+  /**
+   * Get gender int by string
+   */
+  String _getGender(String gender) {
+    switch (gender) {
+      case 'male':
+        return GENDER_MALE;
+      case 'female':
+        return GENDER_FEMALE;
+      case 'androgynous':
+        return GENDER_ANDROGYNOUS;
+    }
+  }
+
+  int _checkGender(String gender) {
+    return this.gender == _getGender(gender) || _getGender(gender) == GENDER_ANDROGYNOUS;
+  }
+
+  String _applyRule(Map<int, String> mods, String name, int cs) {
+    int to = name.length - mods[cs].allMatches('-').length;
+    String result = name.substring(0, to);
+    result += mods[cs].replaceAll('-', '');
+    return result;
+  }
+
 }
