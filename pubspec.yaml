@@ -1,5 +1,5 @@
 name: petrovich
-version: 0.2.0
+version: 0.2.1
 author: Alexey Salnikov <me@iamsalnikov.ru>
 description: A library to inflect Russian anthroponyms such as first names, last names, and middle names. Port of https://github.com/petrovich/petrovich-ruby
 homepage: https://github.com/petrovich/petrovich-dart
