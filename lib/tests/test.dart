@@ -1,8 +1,7 @@
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:petrovich/petrovich.dart';
 
 main() {
-
   test('have gender androgynous', () {
     return expect(Petrovich.GENDER_ANDROGYNOUS, new Petrovich().gender);
   });
@@ -26,5 +25,4 @@ main() {
   test('detect androgynous gender', () {
     return expect(Petrovich.GENDER_ANDROGYNOUS, Petrovich.detectGender('Блабла'));
   });
-
 }
