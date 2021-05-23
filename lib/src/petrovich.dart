@@ -1,7 +1,6 @@
 part of petrovich;
 
 class Petrovich {
-
   static const CASE_NOMENATIVE = -1;
   static const CASE_GENITIVE = 0;
   static const CASE_DATIVE = 1;
@@ -16,19 +15,17 @@ class Petrovich {
   Map _rules;
   int gender = GENDER_ANDROGYNOUS;
 
-  /**
-   * Constructor
-   */
+  /// Constructor
+  ///
   Petrovich([this.gender = GENDER_ANDROGYNOUS, rulesPath = '../rules/rules.json']) {
-    File rulesFile = new File(rulesPath);
+    final rulesFile = File(rulesPath);
 
-    String rulesJson = rulesFile.readAsStringSync();
-    _rules = JSON.decode(rulesJson);
+    final rulesJson = rulesFile.readAsStringSync();
+    _rules = json.decode(rulesJson);
   }
 
-  /**
-   * Detect gender by middle name
-   */
+  /// Detect gender by middle name
+  ///
   static int detectGender(String middleName) {
     switch (middleName.substring(middleName.length - 2)) {
       case 'ич':
@@ -40,10 +37,9 @@ class Petrovich {
     }
   }
 
-  /**
-   * Get gender int by string
-   */
-  String _getGender(String gender) {
+  ///Get gender int by string
+  ///
+  int _getGender(String gender) {
     switch (gender) {
       case 'male':
         return GENDER_MALE;
@@ -52,25 +48,24 @@ class Petrovich {
       case 'androgynous':
         return GENDER_ANDROGYNOUS;
     }
+    return GENDER_ANDROGYNOUS;
   }
 
-  int _checkGender(String gender) {
+  bool _checkGender(String gender) {
     return this.gender == _getGender(gender) || _getGender(gender) == GENDER_ANDROGYNOUS;
   }
 
   String _applyRule(List<String> mods, String name, int cs) {
-    int to = name.length - mods[cs].allMatches('-').length;
-    String result = name.substring(0, to);
-    result += mods[cs].replaceAll('-', '');
-    return result;
+    final to = name.length - mods[cs].allMatches('-').length;
+    return name.substring(0, to) + mods[cs].replaceAll('-', '');
   }
 
-  _checkException(String name, int cs, String type) {
+  String _checkException(String name, int cs, String type) {
     if (!_rules[type].keys.contains('exceptions')) {
-      return false;
+      return null;
     }
 
-    String lowerName = name.toLowerCase();
+    final lowerName = name.toLowerCase();
 
     for (var rule in _rules[type]['exceptions']) {
       if (!_checkGender(rule['gender'])) {
@@ -86,12 +81,11 @@ class Petrovich {
       }
     }
 
-    return false;
-
+    return null;
   }
 
   String _findInRules(String name, int cs, String type) {
-    var suffixes = _rules[type]['suffixes'];
+    final suffixes = _rules[type]['suffixes'];
 
     for (var rule in suffixes) {
       if (!_checkGender(rule['gender'])) {
@@ -99,8 +93,8 @@ class Petrovich {
       }
 
       for (String lastChar in rule['test']) {
-        int from = name.length - lastChar.length;
-        String lastNameChar = name.substring(from, name.length);
+        final from = name.length - lastChar.length;
+        final lastNameChar = name.substring(from, name.length);
 
         if (lastChar == lastNameChar) {
           if (rule['mods'][cs] == '.') {
@@ -116,11 +110,11 @@ class Petrovich {
   }
 
   String _inflect(String name, int cs, String type) {
-    List<String> namesArr = name.split('-');
-    List<String> result = new List<String>();
+    final namesArr = name.split('-');
+    final result = <String>[];
 
     namesArr.forEach((String arrName) {
-      var exception = _checkException(arrName, cs, type);
+      final exception = _checkException(arrName, cs, type);
       if (exception is String) {
         result.add(exception);
       } else {
@@ -154,5 +148,4 @@ class Petrovich {
 
     return _inflect(name, cs, 'firstname');
   }
-
 }
